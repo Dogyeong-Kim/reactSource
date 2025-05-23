@@ -10,6 +10,16 @@ const Form = () => {
 
   const { username, isSubscribed, role } = formData;
 
+  const handleChange = (e) => {
+    // console.log("value ", e.target.value);
+    // console.log("name ", e.target.name);
+    // console.log("type ", e.target.type);
+    // console.log("checked ", e.target.checked);
+
+    const { name, value, type, checked } = e.target;
+    setFormData();
+  };
+
   return (
     <div>
       <p>
@@ -18,12 +28,23 @@ const Form = () => {
       <p>Role : {role}</p>
       <p>
         Name :
-        <input type="text" name="username" placeholder="username" />
+        <input
+          type="text"
+          name="username"
+          placeholder="username"
+          onChange={handleChange}
+          value={username}
+        />
       </p>
-      <input type="checkbox" name="isSubscribed" />
+      <input
+        type="checkbox"
+        name="isSubscribed"
+        onChange={handleChange}
+        value={isSubscribed}
+      />
       <label>Subscribe</label>
       <div>
-        <select name="role">
+        <select name="role" onChange={handleChange} value={role}>
           {roles.map((role, idx) => (
             <option key={idx} value={role}>
               {role}
