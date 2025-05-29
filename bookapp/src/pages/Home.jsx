@@ -1,5 +1,6 @@
 import React from "react";
 import BookList from "../components/BookList";
+import { genres } from "../util";
 
 const Home = () => {
   return (
@@ -10,7 +11,7 @@ const Home = () => {
           <input
             type="text"
             placeholder="Search by title or author"
-            className="outline-0 p-2 border-2 border-gray-300 rounded-sm w-[200px] text-[.9em] leading-tight"
+            className="outline-0 p-2 border-2 border-gray-300 rounded-sm w-[200px] text-[.9em] leading-tight bg-white"
           />
           <select
             name="genre"
@@ -18,7 +19,11 @@ const Home = () => {
             className="outline-0 p-2 border-gray-300 rounded-sm ml-2 text[.9em] leading-tight"
           >
             <option value="">All Genres</option>
-            <option value=""></option>
+            {genres.map((genre, idx) => (
+              <option key={idx} value={idx + 1}>
+                {genre}
+              </option>
+            ))}
           </select>
         </div>
       </header>

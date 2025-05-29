@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import { renderStars, getBookEmoji } from "../util";
+import { renderStars, getBookEmoji, location } from "../util";
 import Loading from "./Loading";
 import Error from "./Error";
 import useCustomMove from "../hooks/useCustomMove";
 
 const BookList = () => {
-  const { data, loading, error } = useFetch();
+  const { data, loading, error, toggleAvailable } = useFetch();
   const { moveToDetail } = useCustomMove();
 
   if (loading) return <Loading />;
@@ -16,7 +16,10 @@ const BookList = () => {
   return (
     <section className="p-0">
       {data.dtoList.map((book) => (
-        <article className="flex items-center border-2 border-stone-200 rounded-[5px] p-4 mb2.5 bg-white">
+        <article
+          className="flex items-center border-2 border-stone-200 rounded-[5px] p-4 mb2.5 bg-white"
+          key={book.id}
+        >
           <div className="first:text-5xl pr-4">{getBookEmoji(book.id)}</div>
           <div className="grow-1">
             <h3>{book.title}</h3>
@@ -27,6 +30,7 @@ const BookList = () => {
           </div>
           <div className="flex flex-col text-[0.9em]">
             <button
+              onClick={() => toggleAvailable(book.id, book.available)}
               className={
                 `w-[100px] m-1 py-2.5 bg-sky-500 text-white rounded-[3px] text-center hover:bg-sky-700 ` +
                 (book.available ? "" : ` opacity-33`)
@@ -43,6 +47,7 @@ const BookList = () => {
           </div>
         </article>
       ))}
+      <p>{location()}</p>
     </section>
   );
 };

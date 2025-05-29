@@ -1,33 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
+import { genres } from "../util";
+import { useNavigate } from "react-router-dom";
 
-const BookForm = () => {
+const BookForm = ({ initialData = {}, onSubmit }) => {
+  const [formData, setFormData] = useState(initialData);
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
   return (
-    <form className="flex flex-col gap-2.5 mt-6">
+    <form
+      className="flex flex-col gap-2.5 mt-6"
+      method="post"
+      onSubmit={handleSubmit}
+    >
       <input
-        type="text"
+        onChange={handleChange}
+        value={formData.title}
+        name="title"
         placeholder="Title"
         required
         className="border-2 border-stone-300 p-2 rounded-xs"
       />
       <input
-        type="text"
+        name="author"
+        onChange={handleChange}
+        value={formData.author}
         placeholder="Author"
         required
         className="border-2 border-stone-300 p-2 rounded-xs"
       />
-      <select name="" className="border-2 border-stone-300 p-2 rounded-xs">
+      <select
+        onChange={handleChange}
+        value={formData.gid}
+        name="gid"
+        className="border-2 border-stone-300 p-2 rounded-xs"
+      >
         <option value="">Select Genre</option>
+        {genres.map((genre, idx) => (
+          <option key={idx} value={idx + 1}>
+            {genre}
+          </option>
+        ))}
       </select>
       <input
+        onChange={handleChange}
+        value={formData.publishedDate}
         type="date"
+        name="publishedDate"
         placeholder="Published Date"
         required
         className="border-2 border-stone-300 p-2 rounded-xs"
       />
       <label htmlFor="">
         <input
+          onChange={handleChange}
+          checked={!!formData?.available}
           type="checkbox"
-          required
+          required={!!formData?.available}
+          name="available"
           className="border-2 border-stone-300 p-2 rounded-xs mr-1.5"
         />
         Available
@@ -37,10 +81,11 @@ const BookForm = () => {
           type="submit"
           className="mx-1 my-6 py-3 px-4.5 text-[1.2em] bg-sky-500 text-white rounded-[3px] text-center hover:bg-sky-700"
         >
-          Add
+          {formData.id ? "Updated" : "Add"}
         </button>
         <button
-          type="submit"
+          onClick={() => navigate("/")}
+          type="button"
           className="mx-1 my-6 py-3 px-4.5 text-[1.2em] bg-red-500 text-white rounded-[3px] text-center hover:bg-red-700"
         >
           Cancel

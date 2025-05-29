@@ -4,6 +4,7 @@ import {
   createSearchParams,
   useNavigate,
   useSearchParams,
+  pageParams,
 } from "react-router-dom";
 
 const useCustomMove = () => {
@@ -24,7 +25,24 @@ const useCustomMove = () => {
     keyword,
   }).toString();
 
-  const moveToList = () => {};
+  // ?page=1&size=&genre=&keyword
+  // moveToList({page:1, size:20, genre:1, keyword:'자바'})
+
+  const moveToList = (pageParam) => {
+    let queryStr = "";
+
+    if (pageParam) {
+      const page = pageParams.get("page", 1);
+      const size = pageParams.get("size", 10);
+      const genre = pageParams.get("genre", 0);
+      const keyword = pageParams.get("keyword", "");
+
+      queryStr = createSearchParams({ page, size, genre, keyword }).toString();
+    } else {
+      queryStr = queryDefault;
+    }
+  };
+
   const moveToDetail = (id) => {
     navigate({
       pathname: `/books/${id}`,
